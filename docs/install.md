@@ -1,6 +1,16 @@
 
 # Installing aider
 
+- [pip install aider-chat](#pip-install-aider-chat)
+- [Provide your OpenAI API key](#provide-your-openai-api-key)
+- [Install git](#install-git)
+
+Optional steps:
+
+- [Install universal ctags (optional)](#install-universal-ctags-optional)
+- [Add aider to your editor (optional)](#add-aider-to-your-editor-optional)
+- [Install PortAudio (optional)](#install-portaudio-optional)
+
 ## pip install aider-chat
 
 Install the “aider-chat” package with pip from one of these sources:
@@ -50,6 +60,9 @@ See the [usage instructions](/#usage) to start coding with aider.
 
 The rest of the install steps are completely optional.
 
+---
+
+
 ## Install universal ctags (optional)
 
 Aider does not require ctags, and will operate just fine without it.
@@ -69,9 +82,9 @@ You should consult the
 for official instructions on how to install it in your environment.
 But you may be able to install a compatible version using these commands:
 
-* Mac: `brew install universal-ctags`
+* Mac: `brew update && brew install universal-ctags`
 * Windows: `choco install universal-ctags`
-* Ubuntu: `sudo apt-get install universal-ctags`
+* Ubuntu: `sudo apt update && sudo apt install universal-ctags`
 
 You know aider has found a working ctags if you see this output when you launch aider:
 
@@ -98,6 +111,18 @@ Exuberant Ctags 5.8, Copyright (C) 1996-2009 Darren Hiebert
   Output version: 0.0
   Optional compiled features: +wildcards, +regex, +gnulib_fnmatch, +gnulib_regex, +iconv, +option-directory, +xpath, +json, +interactive, +yaml, +case-insensitive-filenames, +packcc, +optscript, +pcre2
 ```
+
+## Install PortAudio (optional)
+
+Aider supports [coding with your voice](https://aider.chat/docs/voice.html)
+using the in-chat `/voice` command.
+Aider uses the [PortAudio](http://www.portaudio.com) library to
+capture audio.
+Installing PortAudio is completely optional, but can usually be accomplished like this:
+
+- For Windows, there is no need to install PortAudio.
+- For Mac, do `brew install portaudio`
+- For Linux, do `sudo apt-get install libportaudio2`
 
 ## Add aider to your editor (optional)
 

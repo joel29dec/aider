@@ -5,6 +5,7 @@ from pathlib import Path
 
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.shortcuts import CompleteStyle, PromptSession, prompt
 from prompt_toolkit.styles import Style
@@ -147,6 +148,7 @@ class InputOutput:
             return
         except UnicodeError as e:
             self.tool_error(f"{filename}: {e}")
+            self.tool_error("Use --encoding to set the unicode encoding.")
             return
 
     def write_text(self, filename, content):
@@ -203,7 +205,13 @@ class InputOutput:
             if self.input_history_file is not None:
                 session_kwargs["history"] = FileHistory(self.input_history_file)
 
-            session = PromptSession(**session_kwargs)
+            kb = KeyBindings()
+
+            @kb.add("escape", "c-m", eager=True)
+            def _(event):
+                event.current_buffer.insert_text("\n")
+
+            session = PromptSession(key_bindings=kb, **session_kwargs)
             line = session.prompt()
 
             if line and line[0] == "{" and not multiline_input:
@@ -223,7 +231,23 @@ class InputOutput:
         self.user_input(inp)
         return inp
 
-    def user_input(self, inp):
+    def add_to_input_history(self, inp):
+        if not self.input_history_file:
+            return
+        FileHistory(self.input_history_file).append_string(inp)
+
+    def get_input_history(self):
+        if not self.input_history_file:
+            return []
+
+        fh = FileHistory(self.input_history_file)
+        return fh.load_history_strings()
+
+    def user_input(self, inp, log_only=True):
+        if not log_only:
+            style = dict(style=self.user_input_color) if self.user_input_color else dict()
+            self.console.print(inp, **style)
+
         prefix = "####"
         if inp:
             hist = inp.splitlines()
